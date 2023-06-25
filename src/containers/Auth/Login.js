@@ -17,6 +17,7 @@ class Login extends Component {
             isShowPassword: false,
             errMessage: ''
         }
+
     }
     handleOnChangeUsername = (event) => {
         this.setState({
@@ -31,23 +32,20 @@ class Login extends Component {
         console.log(event.target.value);
     }
     handleLogin = async () => {
-        console.log('username', this.state.username);
-        console.log('password', this.state.password);
-        console.log('all state', this.state);
         this.setState({
             errMessage: ''
         })
         try {
             let data = await handleLoginApi(this.state.username, this.state.password)
-            if (data && data.errCode != 0) {
+            if (data && data.errCode !== 0) {
                 this.setState({
                     errMessage: data.message
                 })
             }
             if (data && data.errCode === 0) {
 
-                // eslint-disable-next-line no-undef
-                userLoginSuccess(data.user)
+                this.props.userLoginSuccess(data.user)
+                console.log('a');
             }
         } catch (error) {
             if (error.response) {
@@ -118,8 +116,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        // adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
+        // userLoginFail: () => dispatch(actions.userLoginFail()),
         userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo)),
     };
 };
